@@ -1,34 +1,108 @@
-#Function: automation.testing(Int Quotes_id)
-Overview
-This Deluge script is designed to automate the processing and updating of product data within a "Quotes" module in Zoho CRM. It retrieves product details from a specific quote record, handles parent-child product relationships, and updates a custom subform field with the processed data.
+# Deluge Script: `automation.testing(Int Quotes_id)`
 
-Key Functionalities
-Retrieve Quote Details:
+## Overview
+This Deluge script automates the processing and updating of product data within a "Quotes" module in Zoho CRM. It retrieves product details, processes hierarchical relationships, and updates the "Quoted_Items" subform for a specific quote OnCreate.
 
-Fetches a quote record using its Quotes_id and retrieves the Product_Details and other relevant fields.
-Process Products:
+---
 
-Loops through the products in the quote, distinguishing between parent and child products.
-Extracts and maps details like product name, list price, quantity, and child product status.
-Child Product Integration:
+## Key Functionalities
 
-For each parent product, fetches associated child products using Zoho's related records API.
-Ensures that child products are appended immediately after their respective parent products in the processed list.
-Custom Variable Utilization:
+### 1. **Retrieve Quote Details**
+- Fetches a quote record using the provided `Quotes_id`.
+- Retrieves `Product_Details`, `Subject`, and other relevant fields.
 
-Incorporates a custom organizational variable, createdProduct, to limit the number of records with specific id assignments in the subform.
-Payload Preparation:
+### 2. **Process Parent and Child Products**
+- Loops through the parent products in the quote.
+- Extracts details like:
+  - Product Name
+  - List Price
+  - Quantity
+  - Child Product Status
+- Fetches child products and appends them immediately after their respective parent products.
 
-Constructs a payload containing the processed product data to update the "Quoted_Items" subform in the "Quotes" module.
-API Call Execution:
+### 3. **Utilize Custom Variables**
+- Leverages a custom organization variable `createdProduct` to limit the number of subform records with specific IDs.
 
-Sends a PUT request to update the "Quotes" record with the constructed payload.
-Update and Log Subform IDs:
+### 4. **Construct and Update Payload**
+- Builds a payload containing processed product data.
+- Updates the "Quoted_Items" subform in the Quotes module using a PUT API request.
 
-Collects subform IDs for processed products and updates a custom field (SubformIDS) using the crm.set connector.
-Logging for Debugging:
+### 5. **Log and Debug**
+- Logs key variables and responses for debugging purposes, including:
+  - Retrieved data
+  - Constructed payloads
+  - API responses
 
-Logs key variables, such as retrieved data, constructed payloads, and API responses, for debugging and monitoring.
-#Usage
-This function is useful for automating complex quote processing tasks in Zoho CRM, particularly for scenarios involving hierarchical product structures. It simplifies data management, ensures consistency, and reduces manual effort in updating quotes with parent-child product relationships.
+---
 
+## Function Parameters
+- **`Quotes_id`**: The unique ID of the quote record to be processed.
+
+---
+
+## Steps Performed by the Function
+
+1. **Fetch Quote Record**
+   - Retrieve quote details and initialize lists for processing product data.
+
+2. **Loop Through Parent Products**
+   - Extract details for each product in the quote.
+   - Fetch related child products using Zoho's API.
+
+3. **Prepare Processed Data**
+   - Create a list of parent and child products with their relevant details.
+   - Ensure child products are associated correctly with their parent.
+
+4. **Construct Payload**
+   - Build a payload for the "Quoted_Items" subform with fields such as:
+     - `Product_Name`
+     - `Quantity`
+     - `List_Price`
+     - `Child_Product`
+
+5. **API Request to Update Quote**
+   - Send a PUT request to update the quote with the constructed payload.
+
+6. **Update Custom Field**
+   - Update a custom field (`SubformIDS`) with the processed subform product IDs using the `crm.set` connector.
+
+7. **Log Results**
+   - Debug and log information about the processed data, payload, and API responses.
+
+---
+
+## Example Usage
+```deluge
+// Example call to the function
+automation.testing(1234567890);
+```
+
+- This would process the quote with ID `1234567890` and update the "Quoted_Items" subform based on the parent and child product relationships.
+
+---
+
+## API Dependencies
+- **Zoho CRM APIs**
+  - `getRecordById`: To fetch quote details.
+  - `getRelatedRecords`: To fetch child products related to a parent product.
+  - `crm.set`: To update custom fields.
+
+---
+
+## Debugging and Logging
+- The script logs key details at each step:
+  - Retrieved quote details.
+  - Constructed subform data.
+  - Final payload for the API request.
+  - Responses from Zoho CRM API calls.
+
+---
+
+## Notes
+- Ensure the custom variable `createdProduct` is defined in your Zoho CRM organization settings.
+- This script is designed for Zoho CRM's Deluge environment and requires appropriate API permissions.
+
+---
+
+## Contribution
+Feel free to contribute enhancements or suggest improvements to this script. Open an issue or submit a pull request!
